@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+<section class="page-title">
+    <h1>Корзина</h1>
+    <p>Проверьте товары и оформите заказ.</p>
+</section>
+
+{% if cart.is_empty %}
+    <div class="empty-state">
+        <h2>Корзина пуста</h2>
+        <a class="button" href="{% url 'store:product_list' %}">Перейти в каталог</a>
+    </div>
+{% else %}
+    <div class="cart-table">
+        <div class="cart-table__head">
+            <span>Товар</span>
+            <span>Цена</span>
+            <span>Количество</span>
+            <span>Сумма</span>
+            <span></span>
+        </div>
+        {% for item in cart %}
+            <div class="cart-row">
+                <div>
+                    <div class="cart-product">
+                        {% if item.product.image_src %}
+                            <img src="{{ item.product.image_src }}" alt="{{ item.product.name }}">
+                        {% endif %}
+                        <div>
+                            <h2>{{ item.product.name }}</h2>
+                            <p>{{ item.product.short_specs }}</p>
+                        </div>
+                    </div>
+                </div>
+                <strong>{{ item.product.price }} ₸</strong>
+                <form method="post" action="{% url 'store:cart_update' item.product.id %}" class="cart-controls">
+                    {% csrf_token %}
+                    <input class="input input--qty" name="quantity" type="number" min="1" value="{{ item.quantity }}">
+                    <button class="mini-button" type="submit">+</button>
+                </form>
+                <strong>{{ item.total_price }} ₸</strong>
+                <form method="post" action="{% url 'store:cart_remove' item.product.id %}">
+                    {% csrf_token %}
+                    <button class="link-button" type="submit">Удалить</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="cart-actions">
+        <form method="post" action="{% url 'store:cart_clear' %}">
+            {% csrf_token %}
+            <button class="button button--secondary" type="submit">Очистить корзину</button>
+        </form>
+        <aside class="cart-summary">
+            <span>Итого:</span>
+            <strong>{{ cart.total_price }} ₸</strong>
+            <a class="button" href="{% url 'store:checkout' %}">Оформить заказ</a>
+        </aside>
+    </div>
+{% endif %}
+{% endblock %}

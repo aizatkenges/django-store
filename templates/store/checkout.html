@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Оформление заказа{% endblock %}
+
+{% block content %}
+<section class="checkout-layout">
+    <div>
+        <h1>Оформление заказа</h1>
+        <p class="description">Заполните данные и подтвердите заказ.</p>
+        <form method="post" class="checkout-form">
+            {% csrf_token %}
+            <fieldset>
+                <legend>Контактные данные</legend>
+                <p>{{ form.customer_name.label_tag }}{{ form.customer_name }}</p>
+                <p>{{ form.email.label_tag }}{{ form.email }}</p>
+                <p>{{ form.phone_number.label_tag }}{{ form.phone_number }}</p>
+            </fieldset>
+            <fieldset>
+                <legend>Адрес доставки</legend>
+                <p>{{ form.address.label_tag }}{{ form.address }}</p>
+                <div class="form-grid">
+                    <p>{{ form.city.label_tag }}{{ form.city }}</p>
+                    <p>{{ form.postal_code.label_tag }}{{ form.postal_code }}</p>
+                </div>
+            </fieldset>
+            <button class="button" type="submit">Подтвердить заказ</button>
+        </form>
+    </div>
+    <aside class="order-preview">
+        <h2>Ваш заказ</h2>
+        {% for item in cart %}
+            <div class="order-preview__row">
+                <span>{{ item.product.name }}<small>{{ item.product.short_specs }}</small></span>
+                <strong>{{ item.total_price }} ₸</strong>
+            </div>
+        {% endfor %}
+        <div class="order-preview__row">
+            <span>Доставка</span>
+            <strong>Бесплатно</strong>
+        </div>
+        <div class="order-preview__total">
+            <span>Итого</span>
+            <strong>{{ cart.total_price }} ₸</strong>
+        </div>
+    </aside>
+</section>
+{% endblock %}

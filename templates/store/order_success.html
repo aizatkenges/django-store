@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Заказ оформлен{% endblock %}
+
+{% block content %}
+<section class="empty-state">
+    <h1>Заказ #{{ order_id }} оформлен</h1>
+    <p>Мы сохранили заказ в базе данных и скоро свяжемся с клиентом.</p>
+    <a class="button" href="{% url 'store:product_list' %}">Вернуться в каталог</a>
+</section>
+{% endblock %}

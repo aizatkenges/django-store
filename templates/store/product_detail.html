@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<article class="product-detail">
+    <div class="product-detail__image">
+        {% if product.image_src %}
+            <img src="{{ product.image_src }}" alt="{{ product.name }}">
+        {% else %}
+            <div class="image-placeholder image-placeholder--large">{{ product.name|first }}</div>
+        {% endif %}
+        <div class="thumb-row">
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+    <div class="product-detail__info">
+        <div class="breadcrumbs">
+            <a href="{% url 'store:product_list' %}">Главная</a>
+            <span>›</span>
+            <a href="{% url 'store:product_list' %}">Каталог</a>
+            <span>›</span>
+            <span>{{ product.name }}</span>
+        </div>
+        <h1>{{ product.name }}</h1>
+        <p class="description">{{ product.description }}</p>
+        <p class="price">{{ product.price }} ₸</p>
+        <p class="stock">В наличии</p>
+        <form method="post" action="{% url 'store:cart_add' product.id %}" class="inline-form">
+            {% csrf_token %}
+            {{ form.quantity.label_tag }}
+            {{ form.quantity }}
+            <button class="button" type="submit">Добавить в корзину</button>
+            <button class="button button--secondary buy-now" name="next" value="checkout" type="submit">Купить сейчас</button>
+        </form>
+    </div>
+</article>
+
+<section class="benefits">
+    <div><strong>Бесплатная доставка</strong><span>При заказе от 50 000 ₸</span></div>
+    <div><strong>Гарантия качества</strong><span>Официальная гарантия</span></div>
+    <div><strong>Возврат 14 дней</strong><span>Легкий возврат товара</span></div>
+    <div><strong>Поддержка 24/7</strong><span>Мы всегда на связи</span></div>
+</section>
+{% endblock %}

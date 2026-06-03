@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Подтвердите email{% endblock %}
+
+{% block content %}
+<section class="empty-state">
+    <h1>Проверьте почту</h1>
+    <p>Мы отправили письмо для подтверждения на {{ email }}.</p>
+    <a class="button" href="{% url 'accounts:login' %}">Перейти ко входу</a>
+</section>
+{% endblock %}
